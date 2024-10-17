@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../bloc/cubit/bottom_nav_bar_cubit.dart';
 import '../../bloc/state/bottom_nav_bar_state.dart';
+import '../cutomer_side/navigation_screens/profile_screen.dart';
 import 'navigation_screens/home_screen.dart';
 import 'navigation_screens/product_screen.dart';
 import 'navigation_screens/order_screen.dart';
@@ -35,7 +36,7 @@ class _MainLayoutState extends State<storemainlayout> {
                   return ProductInfo();
                 } else if (state.navbarItem == NavbarItem.profile) {
                   // الطلبات
-                  return OrderInfo();
+                  return ProfileScreen();
                 }
                 return Container();
               }),
