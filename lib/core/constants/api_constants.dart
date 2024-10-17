@@ -12,6 +12,10 @@ class ApiConstants{
 
   static const String orders = '$baseUrl/orders'; // Add orders endpoint
 
+  static const String customer = '$baseUrl/customers/customer';
+
+
+
 
 
 
