@@ -1,4 +1,4 @@
-class Product {
+class StoreOwnerProduct {
   final String id;
   final String name;
   final double price;
@@ -10,10 +10,10 @@ class Product {
   final String storeOwner;
   final String timeToBeCreated;
   final List<String> images;
-  final String thumbnail;
+  final String? thumbnail; // Change to nullable
   final int stock;
 
-  Product({
+  StoreOwnerProduct({
     required this.id,
     required this.name,
     required this.price,
@@ -25,12 +25,12 @@ class Product {
     required this.storeOwner,
     required this.timeToBeCreated,
     required this.images,
-    required this.thumbnail,
+    this.thumbnail, // Change to nullable
     required this.stock,
   });
 
-  factory Product.fromJson(Map<String, dynamic> json) {
-    return Product(
+  factory StoreOwnerProduct.fromJson(Map<String, dynamic> json) {
+    return StoreOwnerProduct(
       id: json['_id'] ?? 'unknown',
       name: json['name'] ?? 'Unnamed Product',
       price: json['price']?.toDouble() ?? 0.0,
@@ -42,7 +42,9 @@ class Product {
       storeOwner: json['storeOwner'] ?? 'unknown',
       timeToBeCreated: json['timeToBeCreated'] ?? 'unknown',
       images: List<String>.from(json['images'] ?? []),
-      thumbnail: json['thumbnail'] ?? '',
+      thumbnail: json['thumbnail'] != null && Uri.tryParse(json['thumbnail'])?.hasAbsolutePath == true
+          ? json['thumbnail']
+          : null, // Set to null when no valid thumbnail
       stock: json['stock'] ?? 0,
     );
   }

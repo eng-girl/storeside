@@ -1,4 +1,5 @@
-/*import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../bloc/cubit/auth_cubit.dart';
@@ -33,66 +34,67 @@ class ProductInfo extends StatelessWidget {
         },
         builder: (context, productState) {
           if (productState is ProductLoading) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           } else if (productState is ProductLoaded) {
-            final Product product = productState.product; // Get the loaded product information
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text('Product Name: ${product.name}', style: TextStyle(fontSize: 24)),
-                  SizedBox(height: 16),
-                  Text('Price: \$${product.price}', style: TextStyle(fontSize: 20)),
-                  SizedBox(height: 16),
-                  Image.network(product.thumbnail), // Display thumbnail
-                  SizedBox(height: 16),
-                  Text('Description: ${product.description}', style: TextStyle(fontSize: 18)),
-                  SizedBox(height: 8),
-                  Text('Material: ${product.material}', style: TextStyle(fontSize: 18)),
-                  SizedBox(height: 8),
-                  Text('Category: ${product.category}', style: TextStyle(fontSize: 18)),
-                  Text('Stock: ${product.stock}', style: TextStyle(fontSize: 18)),
-                ],
+            final StoreOwnerProduct product = productState.product;
+            return SingleChildScrollView(
+              child: Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Product Name: ${product.name}',
+                        style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(height: 16),
+                      // Display images (carousel or grid view)
+                      product.images.isNotEmpty
+                          ? SizedBox(
+                        height: 300,
+                        child: PageView.builder(
+                          itemCount: product.images.length,
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                              child: Image.network(
+                                product.images[index],
+                                fit: BoxFit.cover,
+                                loadingBuilder: (context, child, loadingProgress) {
+                                  if (loadingProgress == null) return child;
+                                  return const Center(child: CircularProgressIndicator());
+                                },
+                                errorBuilder: (context, error, stackTrace) {
+                                  return const Text('Image not available', style: TextStyle(fontSize: 16));
+                                },
+                              ),
+                            );
+                          },
+                        ),
+                      )
+                          : const Text('No images available', style: TextStyle(fontSize: 16)),
+                      const SizedBox(height: 16),
+                      Text('Price: \$${product.price}', style: const TextStyle(fontSize: 20)),
+                      const SizedBox(height: 16),
+                      Text('Description: ${product.description}', style: const TextStyle(fontSize: 18)),
+                      const SizedBox(height: 8),
+                      Text('Material: ${product.material}', style: const TextStyle(fontSize: 18)),
+                      const SizedBox(height: 8),
+                      Text('Category: ${product.category}', style: const TextStyle(fontSize: 18)),
+                      Text('Stock: ${product.stock}', style: const TextStyle(fontSize: 18)),
+                    ],
+                  ),
+                ),
               ),
             );
           } else if (productState is ProductError) {
-            return Center(child: Text('Something went wrong: ${productState.message}', style: TextStyle(fontSize: 18)));
+            return Center(child: Text('Something went wrong: ${productState.message}', style: const TextStyle(fontSize: 18)));
           }
           // If no product data available, show the no product screen
           return StoreOwnerNoProduct();
         },
-      ),
-    );
-  }
-}*/
-
-
-import 'package:flutter/material.dart';
-import '../../addstoreownerproduct.dart';
-
-class StoreOwnerNoProduct extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset('assets/images/No data-cuate.png', width: 300),
-            const SizedBox(height: 8),
-            const Text('متجرك خالي من المنتجات لنقم بتعبئته معا', style: TextStyle(fontSize: 16)),
-            SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => AddStoreOwnerProduct()),
-                );
-              },
-              child: const Text('إضافة منتج جديد'), // Change button text to Arabic
-            ),
-          ],
-        ),
       ),
     );
   }

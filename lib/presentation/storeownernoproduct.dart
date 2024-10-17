@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'addstoreownerproduct.dart';
 
 class StoreOwnerNoProduct extends StatelessWidget {
   @override
@@ -15,10 +14,10 @@ class StoreOwnerNoProduct extends StatelessWidget {
             SizedBox(height: 16),
             ElevatedButton(
               onPressed: () {
-                Navigator.push(
+               /* Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => AddStoreOwnerProduct()),
-                );
+                );*/
               },
               child: const Text('إضافة منتج جديد'), // Change button text to Arabic
             ),
