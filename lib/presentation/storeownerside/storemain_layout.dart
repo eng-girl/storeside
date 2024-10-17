@@ -35,7 +35,7 @@ class _MainLayoutState extends State<storemainlayout> {
                   return ProductInfo();
                 } else if (state.navbarItem == NavbarItem.profile) {
                   // الطلبات
-                  return orderScreen();
+                  return OrderInfo();
                 }
                 return Container();
               }),

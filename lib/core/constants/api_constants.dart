@@ -10,6 +10,9 @@ class ApiConstants{
 
   static const String addstoreownerproduct = '$baseUrl/stores'; // Base URL for store-related endpoints
 
+  static const String orders = '$baseUrl/orders'; // Add orders endpoint
+
+
 
 
 }

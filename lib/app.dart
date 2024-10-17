@@ -8,6 +8,7 @@ import 'package:untitled2/presentation/storeownernoproduct.dart';
 import 'package:untitled2/presentation/storeownerside/storemain_layout.dart';
 import 'bloc/cubit/auth_cubit.dart';
 import 'bloc/cubit/bottom_nav_bar_cubit.dart';
+import 'bloc/cubit/order_cubit.dart';
 import 'bloc/cubit/store_cubit.dart';
 import 'bloc/cubit/storeownerproduct_cubit.dart';
 import 'bloc/state/auth_state.dart';
@@ -15,6 +16,7 @@ import 'core/network/dio_client.dart';
 import 'core/theme/app_theme.dart';
 import 'core/theme/theme_cubit.dart';
 import 'data/repo/auth_repo.dart';
+import 'data/repo/order_repo.dart';
 import 'data/repo/store_repository.dart';
 import 'data/repo/storeownerproduct_repo.dart';
 
@@ -42,6 +44,10 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => StoreOwnerProductCubit(StoreOwnerProductRepository()),
         ),
+        BlocProvider(
+          create: (context) => OrderCubit(OrderRepository()),
+        ),
+
         // add product to store owner
        /* BlocProvider(
           create: (context) => ProductRepository(ProductRepository()),
