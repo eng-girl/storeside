@@ -11,11 +11,11 @@ class StoreOwnerProductCubit extends Cubit<StoreOwnerProductState> {
   Future<void> fetchProductByStoreOwner(String storeOwnerId) async {
     emit(ProductLoading());
     try {
-      final StoreOwnerProduct? product = await repository.getProductByStoreOwner(storeOwnerId);
-      if (product != null) {
-        emit(ProductLoaded(product));
+      final List<StoreOwnerProduct> products = await repository.getProductsByStoreOwner(storeOwnerId); // Updated to fetch a list
+      if (products.isNotEmpty) {
+        emit(ProductLoaded(products));
       } else {
-        emit(ProductError('Failed to load product details.'));
+        emit(ProductError('No products available.'));
       }
     } catch (e) {
       emit(ProductError('Error: $e'));

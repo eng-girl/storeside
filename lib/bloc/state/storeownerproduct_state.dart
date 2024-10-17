@@ -7,9 +7,9 @@ class ProductInitial extends StoreOwnerProductState {}
 class ProductLoading extends StoreOwnerProductState {}
 
 class ProductLoaded extends StoreOwnerProductState {
-  final StoreOwnerProduct product; // Changed to StoreOwnerProduct
+  final List<StoreOwnerProduct> productList; // Updated to hold a list of products
 
-  ProductLoaded(this.product);
+  ProductLoaded(this.productList);
 }
 
 class ProductError extends StoreOwnerProductState {

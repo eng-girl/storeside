@@ -7,6 +7,7 @@ import '../../../bloc/cubit/storeownerproduct_cubit.dart';
 import '../../../bloc/state/storeownerproduct_state.dart';
 import '../../../data/models/storeowner_product.dart';
 import '../../storeownernoproduct.dart';
+import '../ProductDetailScreen.dart';
 
 class ProductInfo extends StatelessWidget {
   const ProductInfo({super.key});
@@ -22,7 +23,7 @@ class ProductInfo extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Product Details'),
+        title: const Text('Product List'),
       ),
       body: BlocConsumer<StoreOwnerProductCubit, StoreOwnerProductState>(
         listener: (context, productState) {
@@ -36,58 +37,35 @@ class ProductInfo extends StatelessWidget {
           if (productState is ProductLoading) {
             return const Center(child: CircularProgressIndicator());
           } else if (productState is ProductLoaded) {
-            final StoreOwnerProduct product = productState.product;
-            return SingleChildScrollView(
-              child: Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Product Name: ${product.name}',
-                        style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            final List<StoreOwnerProduct> products = productState.productList; // Now this should work
+
+            return ListView.builder(
+              itemCount: products.length,
+              itemBuilder: (context, index) {
+                final StoreOwnerProduct product = products[index];
+                return ListTile(
+                  leading: product.thumbnail != null
+                      ? Image.network(
+                    product.thumbnail!,
+                    width: 50,
+                    height: 50,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      return const Icon(Icons.image_not_supported);
+                    },
+                  )
+                      : const Icon(Icons.image_not_supported),
+                  title: Text(product.name),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ProductDetailScreen(product: product),
                       ),
-                      const SizedBox(height: 16),
-                      // Display images (carousel or grid view)
-                      product.images.isNotEmpty
-                          ? SizedBox(
-                        height: 300,
-                        child: PageView.builder(
-                          itemCount: product.images.length,
-                          itemBuilder: (context, index) {
-                            return Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                              child: Image.network(
-                                product.images[index],
-                                fit: BoxFit.cover,
-                                loadingBuilder: (context, child, loadingProgress) {
-                                  if (loadingProgress == null) return child;
-                                  return const Center(child: CircularProgressIndicator());
-                                },
-                                errorBuilder: (context, error, stackTrace) {
-                                  return const Text('Image not available', style: TextStyle(fontSize: 16));
-                                },
-                              ),
-                            );
-                          },
-                        ),
-                      )
-                          : const Text('No images available', style: TextStyle(fontSize: 16)),
-                      const SizedBox(height: 16),
-                      Text('Price: \$${product.price}', style: const TextStyle(fontSize: 20)),
-                      const SizedBox(height: 16),
-                      Text('Description: ${product.description}', style: const TextStyle(fontSize: 18)),
-                      const SizedBox(height: 8),
-                      Text('Material: ${product.material}', style: const TextStyle(fontSize: 18)),
-                      const SizedBox(height: 8),
-                      Text('Category: ${product.category}', style: const TextStyle(fontSize: 18)),
-                      Text('Stock: ${product.stock}', style: const TextStyle(fontSize: 18)),
-                    ],
-                  ),
-                ),
-              ),
+                    );
+                  },
+                );
+              },
             );
           } else if (productState is ProductError) {
             return Center(child: Text('Something went wrong: ${productState.message}', style: const TextStyle(fontSize: 18)));
