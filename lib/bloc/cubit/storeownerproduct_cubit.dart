@@ -8,14 +8,15 @@ class StoreOwnerProductCubit extends Cubit<StoreOwnerProductState> {
 
   StoreOwnerProductCubit(this.repository) : super(ProductInitial());
 
+  // In storeownerproduct_cubit.dart
   Future<void> fetchProductByStoreOwner(String storeOwnerId) async {
     emit(ProductLoading());
     try {
-      final List<StoreOwnerProduct> products = await repository.getProductsByStoreOwner(storeOwnerId); // Updated to fetch a list
+      final List<StoreOwnerProduct> products = await repository.getProductsByStoreOwner(storeOwnerId);
       if (products.isNotEmpty) {
         emit(ProductLoaded(products));
       } else {
-        emit(ProductError('No products available.'));
+        emit(ProductError('No products available.')); // Emit error state for no products
       }
     } catch (e) {
       emit(ProductError('Error: $e'));

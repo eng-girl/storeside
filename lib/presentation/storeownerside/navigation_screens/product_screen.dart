@@ -37,7 +37,7 @@ class ProductInfo extends StatelessWidget {
           if (productState is ProductLoading) {
             return const Center(child: CircularProgressIndicator());
           } else if (productState is ProductLoaded) {
-            final List<StoreOwnerProduct> products = productState.productList; // Now this should work
+            final List<StoreOwnerProduct> products = productState.productList;
 
             return ListView.builder(
               itemCount: products.length,
@@ -68,7 +68,8 @@ class ProductInfo extends StatelessWidget {
               },
             );
           } else if (productState is ProductError) {
-            return Center(child: Text('Something went wrong: ${productState.message}', style: const TextStyle(fontSize: 18)));
+            // Display the no product screen if the error message indicates no products
+            return StoreOwnerNoProduct();
           }
           // If no product data available, show the no product screen
           return StoreOwnerNoProduct();
