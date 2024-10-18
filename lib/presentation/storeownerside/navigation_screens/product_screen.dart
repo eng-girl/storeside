@@ -311,7 +311,9 @@ class ProductInfo extends StatelessWidget {
 
             return RefreshIndicator(
               onRefresh: _refreshProducts, // Calls the refresh method
-              color: AppColors.primary,    // Color of the refresh spinner
+              color: Theme.of(context).brightness == Brightness.dark
+                  ? AppColors.lightText
+                  : AppColors.white,    // Color of the refresh spinner
               backgroundColor: Colors.white,  // Background color of the refresh circle
               child: ListView.builder(
                 itemCount: products.length,
