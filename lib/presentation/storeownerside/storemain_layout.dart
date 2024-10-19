@@ -30,7 +30,7 @@ class _MainLayoutState extends State<storemainlayout> {
               builder: (context, state) {
                 if (state.navbarItem == NavbarItem.home) {
                   //الرئيسىة
-                  return StorInfo();
+                  return ProfileScreen();
                 } else if (state.navbarItem == NavbarItem.stores) {
                   // المنتجات
                   return ProductInfo();
