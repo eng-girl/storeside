@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
+
 import '../../../data/models/order.dart';
 import '../../../bloc/cubit/order_cubit.dart';
 import '../core/theme/app_colors.dart';
@@ -14,6 +15,11 @@ class OrderCard extends StatelessWidget {
   Widget build(BuildContext context) {
     // Fetch cached customer info
     final customer = context.read<OrderCubit>().getCustomer(order.customerId);
+
+    // Define common TextStyle based on theme
+    final textColor = Theme.of(context).brightness == Brightness.dark
+        ? AppColors.white
+        : AppColors.black;
 
     Color statusColor;
 
@@ -31,14 +37,14 @@ class OrderCard extends StatelessWidget {
         statusColor = Colors.grey;
     }
 
-    return DottedBorder(
-      borderType: BorderType.RRect,
-      radius: Radius.circular(10),
-      dashPattern: [8, 4],
+    return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+      ),
+      elevation: 2, // Add elevation for shadow
       color: Theme.of(context).brightness == Brightness.dark
-          ? AppColors.primary
-          : AppColors.darkBackground,
-      strokeWidth: 1.5,
+          ? AppColors.lightText
+          : AppColors.white,
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -47,24 +53,40 @@ class OrderCard extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Expanded(child: Text('رقم الطلب: ${order.id}', overflow: TextOverflow.ellipsis)),
-                Row(
-                  children: [
-                    Icon(Icons.circle, color: statusColor, size: 10),
-                    SizedBox(width: 5),
-                    Text(order.status, style: TextStyle(color: statusColor)),
-                  ],
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start, // Aligns text to the left
+                    children: [
+                      Row(
+                        children: [
+                          Icon(Icons.circle, color: statusColor, size: 10),
+                          SizedBox(width: 5),
+                          Text(order.status, style: TextStyle(color: statusColor)),
+                        ],
+                      ),
+                      Text(
+                        'رقم الطلب: ${order.id}',
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(color: textColor),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
             SizedBox(height: 8),
-            Text('المبلغ الإجمالي: \$${order.totalAmount}', style: TextStyle(color: Colors.grey)),
+            Row(
+              children: [
+                Text('المبلغ الإجمالي: ', style: TextStyle(color: textColor)),
+                Text('${order.totalAmount}', style: TextStyle(color: textColor)),
+                Text('دل  ', style: TextStyle(color: textColor)),
+              ],
+            ),
             SizedBox(height: 8),
-            Text('عنوان الشحن: ${order.shippingAddress}', style: TextStyle(color: Colors.grey)),
+            Text('عنوان الشحن: ${order.shippingAddress}', style: TextStyle(color: textColor)),
             SizedBox(height: 8),
             if (customer != null) ...[
-              Text('اسم العميل: ${customer.name}', style: TextStyle(color: Colors.grey)),
-              Text('عنوان العميل: ${customer.address}', style: TextStyle(color: Colors.grey)),
+              Text('اسم العميل: ${customer.name}', style: TextStyle(color: textColor)),
             ] else ...[
               const Text('جارٍ تحميل معلومات العميل...', style: TextStyle(color: Colors.grey)),
             ],
@@ -81,10 +103,53 @@ class OrderCard extends StatelessWidget {
                       width: 50,
                       height: 50,
                       fit: BoxFit.cover,
+                      loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+                        if (loadingProgress == null) {
+                          return child; // Image is fully loaded
+                        } else {
+                          return Container(
+                            width: 50,
+                            height: 50,
+                            child: Center(
+                              child: LoadingAnimationWidget.staggeredDotsWave(
+                                color: AppColors.primary,
+                                size: 20,
+                              ),
+                            ),
+                          );
+                        }
+                      },
+                      errorBuilder: (BuildContext context, Object error, StackTrace? stackTrace) {
+                        return Container(
+                          width: 50,
+                          height: 50,
+                          child: Center(
+                            child: Icon(Icons.error, color: Colors.red),
+                          ),
+                        );
+                      },
                     ),
                     const SizedBox(width: 8),
                     Expanded(
-                      child: Text('• ${product.product.name} (x${product.quantity}) - \$${product.product.price}', overflow: TextOverflow.ellipsis),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            '${product.product.name} (x${product.quantity})',
+                            style: TextStyle(color: textColor),
+                          ),
+                          SizedBox(height: 4),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text('السعر ', style: TextStyle(color: textColor)),
+                              Text('${order.totalAmount}', style: TextStyle(color: textColor)),
+                              SizedBox(width: 4),
+                              Text('دل', style: TextStyle(color: textColor)),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
