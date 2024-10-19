@@ -211,7 +211,6 @@ class StorInfo extends StatelessWidget {
 
 // with
 
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
@@ -268,7 +267,7 @@ class StorInfo extends StatelessWidget {
               return Center(
                 child: LoadingAnimationWidget.staggeredDotsWave(
                   color: AppColors.primary, // Customize the spinner color
-                  size: 30,           // Customize the spinner size
+                  size: 30, // Customize the spinner size
                 ),
               );
             } else if (storeState is StoreLoaded) {
@@ -276,19 +275,35 @@ class StorInfo extends StatelessWidget {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  FadeInImage.assetNetwork(
-                    placeholder: 'assets/images/hearts.png', // Path to your placeholder image
-                    image: store.image,
-                    width: double.infinity,
-                    height: 250,
-                    fit: BoxFit.cover,
-                    fadeInDuration: Duration(milliseconds: 300), // Optional fade-in effect
-                    fadeOutDuration: Duration(milliseconds: 300), // Optional fade-out effect
-                    imageErrorBuilder: (context, error, stackTrace) {
-                      return Center(
-                        child: Icon(Icons.error), // Error icon if the image fails to load
-                      );
-                    },
+                  // Use a Container with a fixed height for the image
+                  Container(
+                    height: 250, // Fixed height
+                    child: Image.network(
+                      store.image,
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                      loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+                        if (loadingProgress == null) {
+                          return child; // Image is fully loaded
+                        } else {
+                          return Center(
+                            child: SizedBox(
+                              width: 50,
+                              height: 50,
+                              child: LoadingAnimationWidget.staggeredDotsWave(
+                                color: AppColors.primary, // Customize the spinner color
+                                size: 30, // Customize the spinner size
+                              ),
+                            ),
+                          );
+                        }
+                      },
+                      errorBuilder: (BuildContext context, Object error, StackTrace? stackTrace) {
+                        return Center(
+                          child: Icon(Icons.error, color: AppColors.red), // Error icon if the image fails to load
+                        );
+                      },
+                    ),
                   ),
                   SizedBox(height: 16),
                   Text(
@@ -303,18 +318,6 @@ class StorInfo extends StatelessWidget {
                     textAlign: TextAlign.center,
                   ),
                   SizedBox(height: 16),
-                  /*ElevatedButton(
-                    onPressed: () {},
-                    child: Text("متجري"),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.white,
-                      foregroundColor: Colors.black,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                    ),
-                  ),*/
-                  SizedBox(height: 25),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20.0),
                     child: Column(
@@ -329,7 +332,7 @@ class StorInfo extends StatelessWidget {
                           icon: Icons.credit_card,
                           label: "منتجات",
                           amount: "25",
-                          color: Colors.red,
+                          color: Colors.grey,
                         ),
                         Divider(),
                         TransactionItem(
@@ -341,17 +344,11 @@ class StorInfo extends StatelessWidget {
                         Divider(),
                         TransactionItem(
                           icon: Icons.receipt,
-                          label: "الطليات",
+                          label: "الطلبيات",
                           amount: "20",
                           color: Colors.orange,
                         ),
                         Divider(),
-                        /* TransactionItem(
-                          icon: Icons.savings,
-                          label: "Savings",
-                          amount: "\$1000",
-                          color: Colors.yellow,
-                        ),*/
                       ],
                     ),
                   ),
