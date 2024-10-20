@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconsax/iconsax.dart';
@@ -9,7 +8,8 @@ import '../../../bloc/cubit/store_cubit.dart';
 import '../../../bloc/state/store_state.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../data/models/store_model.dart';
-import '../../../widgets/transaction_item.dart'; // Import TransactionItem from widgets
+import '../../../widgets/transaction_item.dart';
+import '../store_setting.dart'; // Import TransactionItem from widgets
 
 class StorInfo extends StatelessWidget {
   const StorInfo({super.key});
@@ -32,14 +32,40 @@ class StorInfo extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 10),
             child: Row(
               children: [
+                /*IconButton(
+                icon: Icon(Icons.edit,
+                    color: Theme.of(context).brightness == Brightness.dark
+                        ? AppColors.white
+                        : AppColors.black),*/
+                IconButton(
+                  icon:  Icon(
+                    Iconsax.setting_2, // Use Iconsax icon
+                    color: Theme.of(context).brightness == Brightness.dark
+                        ? AppColors.white
+                        : AppColors.black, // Icon color set to black
+                  ),
+                onPressed: () {
+                  final store = context.read<StoreCubit>().state is StoreLoaded
+                      ? (context.read<StoreCubit>().state as StoreLoaded).store
+                      : null;
+                  if (store != null) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ProfilePage(store: store),
+                      ),
+                    );
+                  }
+                },
+              ),
+
+                Spacer(),
                 Icon(
                   Icons.notifications,
                   color: Theme.of(context).brightness == Brightness.dark
                       ? AppColors.white
                       : AppColors.black,
                 ),
-                Spacer(),
-
               ],
             ),
           ),
@@ -56,8 +82,8 @@ class StorInfo extends StatelessWidget {
             if (storeState is StoreLoading) {
               return Center(
                 child: LoadingAnimationWidget.staggeredDotsWave(
-                  color: AppColors.primary, // Customize the spinner color
-                  size: 30, // Customize the spinner size
+                  color: AppColors.primary,
+                  size: 30,
                 ),
               );
             } else if (storeState is StoreLoaded) {
@@ -65,24 +91,23 @@ class StorInfo extends StatelessWidget {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  // Use a Container with a fixed height for the image
                   Container(
-                    height: 250, // Fixed height
+                    height: 250,
                     child: Image.network(
                       store.image,
                       width: double.infinity,
                       fit: BoxFit.cover,
                       loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
                         if (loadingProgress == null) {
-                          return child; // Image is fully loaded
+                          return child;
                         } else {
                           return Center(
                             child: SizedBox(
                               width: 50,
                               height: 50,
                               child: LoadingAnimationWidget.staggeredDotsWave(
-                                color: AppColors.primary, // Customize the spinner color
-                                size: 30, // Customize the spinner size
+                                color: AppColors.primary,
+                                size: 30,
                               ),
                             ),
                           );
@@ -90,7 +115,7 @@ class StorInfo extends StatelessWidget {
                       },
                       errorBuilder: (BuildContext context, Object error, StackTrace? stackTrace) {
                         return Center(
-                          child: Icon(Icons.error, color: AppColors.red), // Error icon if the image fails to load
+                          child: Icon(Icons.error, color: AppColors.red),
                         );
                       },
                     ),
@@ -154,7 +179,4 @@ class StorInfo extends StatelessWidget {
     );
   }
 }
-
-
-
 
