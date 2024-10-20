@@ -39,7 +39,9 @@ class ProfilePage extends StatelessWidget {
                 store.name, // Display store name
                 style: TextStyle(
                   fontSize: 18.0,
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.bold,color: Theme.of(context).brightness == Brightness.dark
+                    ? AppColors.white
+                    : AppColors.black,
                 ),
               ),
               SizedBox(height: 8.0),

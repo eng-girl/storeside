@@ -1,35 +1,33 @@
 import 'package:flutter/material.dart';
-
+import 'package:google_fonts/google_fonts.dart';
 import 'app_colors.dart';
 
 class AppTheme {
   static ThemeData lightTheme = ThemeData(
     brightness: Brightness.light,
     primaryColor: AppColors.primary,
-    fontFamily: 'Cairo',
+    textTheme: GoogleFonts.cairoTextTheme(), // Use the Cairo font
     scaffoldBackgroundColor: AppColors.lightBackground,
     buttonTheme: const ButtonThemeData(
       buttonColor: AppColors.primary,
-      textTheme: ButtonTextTheme
-          .primary, // Ensures text color matches the button color
+      textTheme: ButtonTextTheme.primary,
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
         backgroundColor: AppColors.primary,
-        foregroundColor: AppColors
-            .lightText, // Text color for light mode buttons
+        foregroundColor: AppColors.lightText,
       ),
     ),
-    inputDecorationTheme: const InputDecorationTheme(
+    inputDecorationTheme: InputDecorationTheme(
       filled: true,
       fillColor: AppColors.cardsBackgroundLight,
-      enabledBorder: OutlineInputBorder(
+      enabledBorder: const OutlineInputBorder(
         borderSide: BorderSide(color: AppColors.lightGrey),
       ),
-      focusedBorder: OutlineInputBorder(
+      focusedBorder: const OutlineInputBorder(
         borderSide: BorderSide(color: AppColors.primary),
       ),
-      labelStyle: TextStyle(color: AppColors.lightText),
+      labelStyle: GoogleFonts.cairo(color: AppColors.lightText), // Use the Cairo font for labels
     ),
     bottomNavigationBarTheme: const BottomNavigationBarThemeData(
       selectedItemColor: AppColors.primary,
@@ -46,8 +44,7 @@ class AppTheme {
 
   static ThemeData darkTheme = ThemeData(
     brightness: Brightness.dark,
-    fontFamily: 'Cairo',
-
+    textTheme: GoogleFonts.cairoTextTheme(), // Use the Cairo font
     primaryColor: AppColors.primary,
     scaffoldBackgroundColor: AppColors.darkBackground,
     buttonTheme: const ButtonThemeData(
@@ -57,19 +54,19 @@ class AppTheme {
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
         backgroundColor: AppColors.primary,
-        foregroundColor: AppColors.darkText, // Text color for dark mode buttons
+        foregroundColor: AppColors.darkText,
       ),
     ),
-    inputDecorationTheme: const InputDecorationTheme(
+    inputDecorationTheme: InputDecorationTheme(
       filled: true,
       fillColor: AppColors.cardsBackgroundDark,
-      enabledBorder: OutlineInputBorder(
+      enabledBorder: const OutlineInputBorder(
         borderSide: BorderSide(color: AppColors.darkGrey),
       ),
-      focusedBorder: OutlineInputBorder(
+      focusedBorder: const OutlineInputBorder(
         borderSide: BorderSide(color: AppColors.primary),
       ),
-      labelStyle: TextStyle(color: AppColors.darkText),
+      labelStyle: GoogleFonts.cairo(color: AppColors.darkText), // Use the Cairo font for labels
     ),
     bottomNavigationBarTheme: const BottomNavigationBarThemeData(
       selectedItemColor: AppColors.primary,
@@ -83,5 +80,4 @@ class AppTheme {
       elevation: 0,
     ),
   );
-
 }

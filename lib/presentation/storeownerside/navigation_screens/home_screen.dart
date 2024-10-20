@@ -171,7 +171,7 @@ class StorInfo extends StatelessWidget {
               );
             }
             return Center(
-              child: Text('No store data available', style: TextStyle(fontSize: 18)),
+              child: Text('لا توجد بيانات تحقق من الاتصال بالانترنت', style: TextStyle(fontSize: 18)),
             );
           },
         ),
